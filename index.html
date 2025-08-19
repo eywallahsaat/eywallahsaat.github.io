@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Eywallah Saat</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="Eyw Saat.png" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main class="app">
-      <!-- Logo ve başlık -->
-      <div class="logo-header">
-        <img src="Eyw Saat.png" alt="Eywallah Saat Logo" class="logo" />
-        <h1 class="site-title">Eywallah Saat</h1>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canlı Saat, Kronometre ve Zamanlayıcı</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      <section class="card">
-        <header class="card__header">
-          <h2 class="title">Saat</h2>
-          <div class="spacer"></div>
-          <button id="themeToggle" class="btn" aria-label="Temayı değiştir">🌓</button>
-        </header>
+    <h1>Web Uygulaması</h1>
 
-        <div class="time" aria-live="polite" aria-atomic="true">
-          <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span id="secondsWrap" class="seconds"><span class="colon">:</span><span id="seconds">00</span></span>
-          <span id="ampm" class="ampm" aria-hidden="true"></span>
-        </div>
+    <div class="card">
+        <h2>Canlı İstanbul Saati</h2>
+        <div id="live-clock" class="display">00:00:00</div>
+    </div>
 
-        <p id="date" class="date">Pazartesi, 1 Ocak 2025</p>
-
+    <div class="card">
+        <h2>Kronometre</h2>
+        <div id="stopwatch-display" class="display">00:00:00</div>
         <div class="controls">
-          <label class="switch">
-            <input type="checkbox" id="is24h" />
-            <span class="slider"></span>
-          </label>
-          <span class="switch__label">24 saat</span>
-
-          <label class="switch">
-            <input type="checkbox" id="showSeconds" checked />
-            <span class="slider"></span>
-          </label>
-          <span class="switch__label">Saniye</span>
+            <button onclick="startStopwatch()">Başlat</button>
+            <button onclick="stopStopwatch()">Durdur</button>
+            <button onclick="resetStopwatch()">Sıfırla</button>
         </div>
-      </section>
+    </div>
 
-      <footer class="footer">
-        <p>Yerel saat dilimi: <span id="tz"></span></p>
-      </footer>
-    </main>
+    <div class="card">
+        <h2>Zamanlayıcı</h2>
+        <div id="timer-inputs">
+            <input type="number" id="timer-hours" placeholder="Saat" min="0" value="0">
+            <input type="number" id="timer-minutes" placeholder="Dakika" min="0" value="0">
+            <input type="number" id="timer-seconds" placeholder="Saniye" min="0" value="0">
+        </div>
+        <div id="timer-display" class="display">00:00:00</div>
+        <div class="controls">
+            <button onclick="startTimer()">Başlat</button>
+            <button onclick="stopTimer()">Durdur</button>
+            <button onclick="resetTimer()">Sıfırla</button>
+        </div>
+    </div>
 
-    <script src="app.js" defer></script>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
