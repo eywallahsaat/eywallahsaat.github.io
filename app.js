@@ -1,5 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Tema değiştirme işlemleri
+    // SPA Navigation
+    function navigateTo(viewId) {
+        document.querySelector('.view.active').classList.remove('active');
+        document.getElementById(viewId).classList.add('active');
+        document.querySelector('.bottom-nav button.active').classList.remove('active');
+        document.querySelector(`[data-view="${viewId}"]`).classList.add('active');
+    }
+
+    document.querySelectorAll('.bottom-nav button').forEach(button => {
+        button.addEventListener('click', () => {
+            navigateTo(button.dataset.view);
+        });
+    });
+
+    // Theme Management
     const themeToggle = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
@@ -11,30 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', newTheme);
     });
 
-    // Bölüm geçişleri
-    const navButtons = document.querySelectorAll('.bottom-nav button');
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            document.querySelector('.section.active').classList.remove('active');
-            document.getElementById(button.dataset.section).classList.add('active');
-            document.querySelector('.bottom-nav button.active').classList.remove('active');
-            button.classList.add('active');
-        });
-    });
-
-    // Tam ekran işlemleri
-    document.querySelectorAll('.fullscreen-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const section = btn.closest('.section');
-            if (!document.fullscreenElement) {
-                section.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        });
-    });
-
-    // Canlı saat
+    // Clock Function
     function updateClock() {
         const now = new Date();
         const timeString = now.toLocaleTimeString('tr-TR', { 
@@ -55,21 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Zamanlayıcı işlemleri
-    let timerInterval;
+    // Timer Functions
+    const alertSound = document.getElementById('alert-sound');
     let alertRepeatCount = 0;
     const MAX_REPEATS = 3;
-    const alertSound = document.getElementById('alert-sound');
-    const timerToggle = document.getElementById('timer-toggle');
+    let timerInterval;
 
     function playAlert() {
         alertRepeatCount = 0;
         alertSound.addEventListener('ended', alertEndHandler);
         alertSound.play();
-        
-        if (Notification.permission === 'granted') {
-            new Notification('Zamanlayıcı bitti!');
-        }
     }
 
     function alertEndHandler() {
@@ -82,6 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function stopAlert() {
+        alertSound.removeEventListener('ended', alertEndHandler);
+        alertSound.pause();
+        alertSound.currentTime = 0;
+        alertRepeatCount = 0;
+    }
+
+    const timerToggle = document.getElementById('timer-toggle');
     timerToggle.addEventListener('click', () => {
         if (timerToggle.textContent === 'Başlat') {
             const minutes = parseInt(document.getElementById('timer-minutes').value) || 0;
@@ -113,15 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('timer-reset').addEventListener('click', () => {
         clearInterval(timerInterval);
-        alertSound.pause();
-        alertSound.currentTime = 0;
+        stopAlert();
         timerToggle.textContent = 'Başlat';
         document.getElementById('timer-display').textContent = '00:00';
         document.getElementById('timer-minutes').value = '';
         document.getElementById('timer-seconds').value = '';
     });
 
-    // Kronometre işlemleri
+    // Stopwatch Functions
     let stopwatchInterval;
     let stopwatchTime = 0;
     const stopwatchDisplay = document.getElementById('stopwatch-display');
@@ -155,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stopwatchToggle.textContent = 'Başlat';
     });
 
-    // Alarm işlemleri
+    // Alarm Functions
     let alarmTimeout;
     const alarmToggle = document.getElementById('alarm-toggle');
     
@@ -183,22 +176,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             clearTimeout(alarmTimeout);
-            alertSound.pause();
-            alertSound.currentTime = 0;
+            stopAlert();
             alarmToggle.textContent = 'Başlat';
         }
     });
 
     document.getElementById('alarm-reset').addEventListener('click', () => {
         clearTimeout(alarmTimeout);
-        alertSound.pause();
-        alertSound.currentTime = 0;
+        stopAlert();
         alarmToggle.textContent = 'Başlat';
         document.getElementById('alarm-display').textContent = '';
         document.getElementById('alarm-time').value = '';
     });
 
-    // Bildirim izni
+    // Notification Permission
     if ('Notification' in window) {
         Notification.requestPermission();
     }
