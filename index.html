@@ -7,84 +7,24 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="theme-switch">
-        <button id="theme-toggle">Tema Değiştir</button>
-    </div>
-
+    <!-- ...existing code... -->
     <section id="clock-section" class="section active">
         <div class="container">
             <button class="fullscreen-btn">⛶</button>
             <div class="content-center">
+                <h2 class="app-title">Eywallah Saat</h2>
                 <img src="logo.png" alt="Eywallah Saat Logo" class="logo">
+                <div class="divider"></div>
                 <div class="clock">
-                    <h2 class="app-title">Eywallah Saat</h2>
                     <h1 id="current-time"></h1>
                     <p id="date"></p>
                 </div>
             </div>
         </div>
     </section>
-
-    <section id="timer-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn">⛶</button>
-            <div class="content-center">
-                <div class="timer">
-                    <div class="input-group">
-                        <input type="number" id="timer-minutes" placeholder="Dakika" min="0">
-                        <input type="number" id="timer-seconds" placeholder="Saniye" min="0" max="59">
-                    </div>
-                    <div id="timer-display">00:00</div>
-                    <div class="controls">
-                        <button id="timer-toggle">Başlat</button>
-                        <button id="timer-reset">Sıfırla</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="alarm-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn">⛶</button>
-            <div class="content-center">
-                <div class="alarm">
-                    <input type="time" id="alarm-time">
-                    <div id="alarm-display"></div>
-                    <div class="controls">
-                        <button id="alarm-toggle">Başlat</button>
-                        <button id="alarm-reset">Sıfırla</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="stopwatch-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn">⛶</button>
-            <div class="content-center">
-                <div class="stopwatch">
-                    <div id="stopwatch-display">00:00:00.000</div>
-                    <div class="controls">
-                        <button id="stopwatch-toggle">Başlat</button>
-                        <button id="stopwatch-reset">Sıfırla</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <nav class="bottom-nav">
-        <button data-section="clock-section" class="active">Saat</button>
-        <button data-section="timer-section">Zamanlayıcı</button>
-        <button data-section="alarm-section">Alarm</button>
-        <button data-section="stopwatch-section">Kronometre</button>
-    </nav>
-
-    <audio id="alert-sound" src="alert.mp3"></audio>
-    <script src="app.js"></script>
+    <!-- ...rest of the existing code... -->
 </body>
 </html>
