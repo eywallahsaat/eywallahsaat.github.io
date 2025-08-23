@@ -5,48 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eywallah Saat</title>
     <link rel="stylesheet" href="style.css">
-
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="logo.png">
 </head>
 <body>
+    <div class="container">
+        <img src="logo.png" alt="Eywallah Saat Logo" class="logo">
+        
+        <div class="theme-switch">
+            <input type="checkbox" id="theme-toggle">
+            <label for="theme-toggle">Tema Değiştir</label>
+        </div>
+        
+        <div class="clock">
+            <h1 id="current-time"></h1>
+            <p id="date"></p>
+        </div>
 
-    <div class="logo-container">
-        <img src="Eyw Saat-photoaidcom-cropped.png" alt="Eyw Saat Logo" class="logo">
-    </div>
-
-    <h1>Web Uygulaması</h1>
-
-    <div class="card">
-        <h2>Canlı İstanbul Saati</h2>
-        <div id="live-clock" class="display">00:00:00</div>
-    </div>
-
-    <div class="card">
-        <h2>Kronometre</h2>
-        <div id="stopwatch-display" class="display">00:00:00</div>
         <div class="controls">
-            <button onclick="startStopwatch()">Başlat</button>
-            <button onclick="stopStopwatch()">Durdur</button>
-            <button onclick="resetStopwatch()">Sıfırla</button>
+            <button id="alarm-btn">Alarm</button>
+            <button id="stopwatch-btn">Kronometre</button>
+            <button id="timer-btn">Zamanlayıcı</button>
         </div>
     </div>
-
-    <div class="card">
-        <h2>Zamanlayıcı</h2>
-        <div id="timer-inputs">
-            <input type="number" id="timer-hours" placeholder="Saat" min="0" value="0">
-            <input type="number" id="timer-minutes" placeholder="Dakika" min="0" value="0">
-            <input type="number" id="timer-seconds" placeholder="Saniye" min="0" value="0">
-        </div>
-        <div id="timer-display" class="display">00:00:00</div>
-        <div class="controls">
-            <button onclick="startTimer()">Başlat</button>
-            <button onclick="stopTimer()">Durdur</button>
-            <button onclick="resetTimer()">Sıfırla</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
