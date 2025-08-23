@@ -27,19 +27,12 @@ body {
     overflow: hidden;
 }
 
-#app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
 .content-center {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    min-height: calc(100vh - 150px);
 }
 
 .theme-switch {
@@ -58,7 +51,30 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1.2rem;
-    font-family: 'Rajdhani', sans-serif;
+}
+
+#theme-toggle:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+}
+
+.section {
+    height: 100vh;
+    display: none;
+    padding: 20px;
+    background: var(--section-bg);
+}
+
+.section.active {
+    display: block;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    position: relative;
 }
 
 .logo {
@@ -90,19 +106,19 @@ body {
 }
 
 .clock {
+    font-size: 2rem;
+    margin: 20px 0;
     text-align: center;
-    margin: 20px 0;
 }
 
-.current-time {
+#current-time {
     font-size: 7rem;
-    font-weight: 600;
-    margin: 20px 0;
+    margin: 30px 0;
+    font-weight: bold;
 }
 
-.date {
+#date {
     font-size: 2.8rem;
-    font-weight: 500;
     margin-top: 20px;
     color: var(--accent-color);
 }
@@ -123,17 +139,17 @@ input[type="time"] {
     background: var(--bg-color);
     color: var(--text-color);
     font-size: 3rem;
-    font-family: 'Rajdhani', sans-serif;
     width: 220px;
     text-align: center;
 }
 
-.timer-display,
-.stopwatch-display,
-.alarm-display {
+#timer-display,
+#stopwatch-display,
+#alarm-display {
     font-size: 7rem;
     margin: 40px 0;
-    font-weight: 600;
+    font-family: monospace;
+    font-weight: bold;
 }
 
 .controls {
@@ -150,7 +166,6 @@ input[type="time"] {
     border-radius: 30px;
     font-size: 1.8rem;
     font-weight: 600;
-    font-family: 'Rajdhani', sans-serif;
     transition: all 0.3s ease;
 }
 
@@ -160,6 +175,10 @@ input[type="time"] {
 }
 
 .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-around;
     padding: 25px;
@@ -176,7 +195,6 @@ input[type="time"] {
     transition: all 0.3s ease;
     font-size: 1.5rem;
     font-weight: 600;
-    font-family: 'Rajdhani', sans-serif;
 }
 
 .bottom-nav button.active {
