@@ -1,4 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let alertRepeatCount = 0;
+    const MAX_REPEATS = 3;
+    const alertSound = document.getElementById('alert-sound');
+
+    function playAlertWithRepeats() {
+        alertRepeatCount = 0;
+        alertSound.loop = false;
+        
+        function alertEndHandler() {
+            alertRepeatCount++;
+            if (alertRepeatCount < MAX_REPEATS) {
+                alertSound.play();
+            } else {
+                alertSound.removeEventListener('ended', alertEndHandler);
+                alertRepeatCount = 0;
+            }
+        }
+        
+        alertSound.addEventListener('ended', alertEndHandler);
+        alertSound.play();
+    }
+
+    function stopAlertSound() {
+        alertSound.pause();
+        alertSound.currentTime = 0;
+        alertRepeatCount = 0;
+    }
+
     // Theme switching
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
@@ -51,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerInterval;
     const timerToggle = document.getElementById('timer-toggle');
     const timerDisplay = document.getElementById('timer-display');
-    const alertSound = document.getElementById('alert-sound');
 
     timerToggle.addEventListener('click', () => {
         if (timerToggle.textContent === 'Başlat') {
@@ -70,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (timeLeft <= 0) {
                         clearInterval(timerInterval);
-                        alertSound.play();
+                        playAlertWithRepeats();
                         timerToggle.textContent = 'Başlat';
                         if (Notification.permission === 'granted') {
                             new Notification('Zamanlayıcı bitti!');
@@ -87,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('timer-reset').addEventListener('click', () => {
         clearInterval(timerInterval);
+        stopAlertSound();
         timerToggle.textContent = 'Başlat';
         timerDisplay.textContent = '00:00';
         document.getElementById('timer-minutes').value = '';
@@ -143,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const timeUntilAlarm = alarm - now;
                 alarmTimeout = setTimeout(() => {
-                    alertSound.play();
+                    playAlertWithRepeats();
                     if (Notification.permission === 'granted') {
                         new Notification('Alarm!');
                     }
@@ -155,13 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             clearTimeout(alarmTimeout);
+            stopAlertSound();
             alarmToggle.textContent = 'Başlat';
-            alarmDisplay.textContent = '';
         }
     });
 
     document.getElementById('alarm-reset').addEventListener('click', () => {
         clearTimeout(alarmTimeout);
+        stopAlertSound();
         alarmToggle.textContent = 'Başlat';
         alarmDisplay.textContent = '';
         document.getElementById('alarm-time').value = '';
