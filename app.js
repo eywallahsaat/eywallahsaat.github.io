@@ -1,52 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let alertRepeatCount = 0;
-    const MAX_REPEATS = 3;
-    const alertSound = document.getElementById('alert-sound');
-
-    function playAlertWithRepeats() {
-        alertRepeatCount = 0;
-        alertSound.loop = false;
-        
-        function alertEndHandler() {
-            alertRepeatCount++;
-            if (alertRepeatCount < MAX_REPEATS) {
-                alertSound.play();
-            } else {
-                alertSound.removeEventListener('ended', alertEndHandler);
-                alertRepeatCount = 0;
-            }
-        }
-        
-        alertSound.addEventListener('ended', alertEndHandler);
-        alertSound.play();
-    }
-
-    function stopAlertSound() {
-        alertSound.pause();
-        alertSound.currentTime = 0;
-        alertRepeatCount = 0;
-    }
-
-    // Theme switching
+    // Tema değiştirme işlemleri
     const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+
     themeToggle.addEventListener('click', () => {
         const currentTheme = document.body.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
     });
 
-    // Section navigation
+    // Bölüm geçişleri
     const navButtons = document.querySelectorAll('.bottom-nav button');
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
             document.querySelector('.section.active').classList.remove('active');
-            document.querySelector(`#${button.dataset.section}`).classList.add('active');
+            document.getElementById(button.dataset.section).classList.add('active');
             document.querySelector('.bottom-nav button.active').classList.remove('active');
             button.classList.add('active');
         });
     });
 
-    // Fullscreen functionality
+    // Tam ekran işlemleri
     document.querySelectorAll('.fullscreen-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const section = btn.closest('.section');
@@ -58,14 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Clock functionality
+    // Canlı saat
     function updateClock() {
         const now = new Date();
         const timeString = now.toLocaleTimeString('tr-TR', { 
-            timeZone: 'Europe/Istanbul',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
+            timeZone: 'Europe/Istanbul' 
         });
         const dateString = now.toLocaleDateString('tr-TR', {
             timeZone: 'Europe/Istanbul',
@@ -82,10 +55,32 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Timer functionality
+    // Zamanlayıcı işlemleri
     let timerInterval;
+    let alertRepeatCount = 0;
+    const MAX_REPEATS = 3;
+    const alertSound = document.getElementById('alert-sound');
     const timerToggle = document.getElementById('timer-toggle');
-    const timerDisplay = document.getElementById('timer-display');
+
+    function playAlert() {
+        alertRepeatCount = 0;
+        alertSound.addEventListener('ended', alertEndHandler);
+        alertSound.play();
+        
+        if (Notification.permission === 'granted') {
+            new Notification('Zamanlayıcı bitti!');
+        }
+    }
+
+    function alertEndHandler() {
+        alertRepeatCount++;
+        if (alertRepeatCount < MAX_REPEATS) {
+            alertSound.play();
+        } else {
+            alertSound.removeEventListener('ended', alertEndHandler);
+            alertRepeatCount = 0;
+        }
+    }
 
     timerToggle.addEventListener('click', () => {
         if (timerToggle.textContent === 'Başlat') {
@@ -99,16 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeLeft--;
                     const displayMinutes = Math.floor(timeLeft / 60);
                     const displaySeconds = timeLeft % 60;
-                    timerDisplay.textContent = 
+                    document.getElementById('timer-display').textContent = 
                         `${displayMinutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
                     
                     if (timeLeft <= 0) {
                         clearInterval(timerInterval);
-                        playAlertWithRepeats();
+                        playAlert();
                         timerToggle.textContent = 'Başlat';
-                        if (Notification.permission === 'granted') {
-                            new Notification('Zamanlayıcı bitti!');
-                        }
                     }
                 }, 1000);
                 timerToggle.textContent = 'Durdur';
@@ -121,53 +113,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('timer-reset').addEventListener('click', () => {
         clearInterval(timerInterval);
-        stopAlertSound();
+        alertSound.pause();
+        alertSound.currentTime = 0;
         timerToggle.textContent = 'Başlat';
-        timerDisplay.textContent = '00:00';
+        document.getElementById('timer-display').textContent = '00:00';
         document.getElementById('timer-minutes').value = '';
         document.getElementById('timer-seconds').value = '';
     });
 
-    // Stopwatch functionality with milliseconds
+    // Kronometre işlemleri
     let stopwatchInterval;
     let stopwatchTime = 0;
-    let startTime;
-    const stopwatchToggle = document.getElementById('stopwatch-toggle');
     const stopwatchDisplay = document.getElementById('stopwatch-display');
+    const stopwatchToggle = document.getElementById('stopwatch-toggle');
 
     stopwatchToggle.addEventListener('click', () => {
         if (stopwatchToggle.textContent === 'Başlat') {
-            startTime = Date.now() - (stopwatchTime * 1000);
             stopwatchInterval = setInterval(() => {
-                const elapsedTime = Date.now() - startTime;
-                const hours = Math.floor(elapsedTime / 3600000);
-                const minutes = Math.floor((elapsedTime % 3600000) / 60000);
-                const seconds = Math.floor((elapsedTime % 60000) / 1000);
-                const milliseconds = elapsedTime % 1000;
-                
-                stopwatchDisplay.textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+                stopwatchTime++;
+                updateStopwatch();
             }, 10);
             stopwatchToggle.textContent = 'Durdur';
         } else {
             clearInterval(stopwatchInterval);
-            stopwatchTime = (Date.now() - startTime) / 1000;
             stopwatchToggle.textContent = 'Başlat';
         }
     });
 
+    function updateStopwatch() {
+        const minutes = Math.floor(stopwatchTime / 6000);
+        const seconds = Math.floor((stopwatchTime % 6000) / 100);
+        const centiseconds = stopwatchTime % 100;
+        stopwatchDisplay.textContent = 
+            `00:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+    }
+
     document.getElementById('stopwatch-reset').addEventListener('click', () => {
         clearInterval(stopwatchInterval);
         stopwatchTime = 0;
-        stopwatchDisplay.textContent = '00:00:00.000';
+        updateStopwatch();
         stopwatchToggle.textContent = 'Başlat';
     });
 
-    // Alarm functionality
+    // Alarm işlemleri
     let alarmTimeout;
     const alarmToggle = document.getElementById('alarm-toggle');
-    const alarmDisplay = document.getElementById('alarm-display');
-
+    
     alarmToggle.addEventListener('click', () => {
         if (alarmToggle.textContent === 'Başlat') {
             const alarmTime = document.getElementById('alarm-time').value;
@@ -183,32 +174,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const timeUntilAlarm = alarm - now;
                 alarmTimeout = setTimeout(() => {
-                    playAlertWithRepeats();
-                    if (Notification.permission === 'granted') {
-                        new Notification('Alarm!');
-                    }
+                    playAlert();
                     alarmToggle.textContent = 'Başlat';
                 }, timeUntilAlarm);
                 
                 alarmToggle.textContent = 'Durdur';
-                alarmDisplay.textContent = alarmTime;
+                document.getElementById('alarm-display').textContent = alarmTime;
             }
         } else {
             clearTimeout(alarmTimeout);
-            stopAlertSound();
+            alertSound.pause();
+            alertSound.currentTime = 0;
             alarmToggle.textContent = 'Başlat';
         }
     });
 
     document.getElementById('alarm-reset').addEventListener('click', () => {
         clearTimeout(alarmTimeout);
-        stopAlertSound();
+        alertSound.pause();
+        alertSound.currentTime = 0;
         alarmToggle.textContent = 'Başlat';
-        alarmDisplay.textContent = '';
+        document.getElementById('alarm-display').textContent = '';
         document.getElementById('alarm-time').value = '';
     });
 
-    // Notification permission
+    // Bildirim izni
     if ('Notification' in window) {
         Notification.requestPermission();
     }
