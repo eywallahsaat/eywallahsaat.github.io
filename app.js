@@ -62,10 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateClock() {
         const now = new Date();
         const timeString = now.toLocaleTimeString('tr-TR', { 
-            timeZone: 'Europe/Istanbul' 
+            timeZone: 'Europe/Istanbul',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
         });
         const dateString = now.toLocaleDateString('tr-TR', {
-            timeZone: 'Europe/Istanbul'
+            timeZone: 'Europe/Istanbul',
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
         
         document.getElementById('current-time').textContent = timeString;
@@ -121,25 +128,30 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('timer-seconds').value = '';
     });
 
-    // Stopwatch functionality
+    // Stopwatch functionality with milliseconds
     let stopwatchInterval;
     let stopwatchTime = 0;
+    let startTime;
     const stopwatchToggle = document.getElementById('stopwatch-toggle');
     const stopwatchDisplay = document.getElementById('stopwatch-display');
 
     stopwatchToggle.addEventListener('click', () => {
         if (stopwatchToggle.textContent === 'Başlat') {
+            startTime = Date.now() - (stopwatchTime * 1000);
             stopwatchInterval = setInterval(() => {
-                stopwatchTime++;
-                const hours = Math.floor(stopwatchTime / 3600);
-                const minutes = Math.floor((stopwatchTime % 3600) / 60);
-                const seconds = stopwatchTime % 60;
+                const elapsedTime = Date.now() - startTime;
+                const hours = Math.floor(elapsedTime / 3600000);
+                const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                const milliseconds = elapsedTime % 1000;
+                
                 stopwatchDisplay.textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            }, 10);
             stopwatchToggle.textContent = 'Durdur';
         } else {
             clearInterval(stopwatchInterval);
+            stopwatchTime = (Date.now() - startTime) / 1000;
             stopwatchToggle.textContent = 'Başlat';
         }
     });
@@ -147,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('stopwatch-reset').addEventListener('click', () => {
         clearInterval(stopwatchInterval);
         stopwatchTime = 0;
-        stopwatchDisplay.textContent = '00:00:00';
+        stopwatchDisplay.textContent = '00:00:00.000';
         stopwatchToggle.textContent = 'Başlat';
     });
 
