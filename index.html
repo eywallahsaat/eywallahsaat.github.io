@@ -4,89 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eywallah Saat</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/main.css">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-theme="light">
-    <div class="theme-switch">
-        <button id="theme-toggle">Tema Değiştir</button>
+    <div id="app">
+        <div class="theme-switch">
+            <button id="theme-toggle">Tema Değiştir</button>
+        </div>
+
+        <main id="main-content"></main>
+
+        <nav class="bottom-nav">
+            <button data-view="clock" class="active">Saat</button>
+            <button data-view="timer">Zamanlayıcı</button>
+            <button data-view="alarm">Alarm</button>
+            <button data-view="stopwatch">Kronometre</button>
+        </nav>
     </div>
 
-    <section id="clock-section" class="section active">
-        <div class="container">
-            <button class="fullscreen-btn" title="Tam Ekran">⛶</button>
-            <div class="content-center">
-                <h2 class="app-title">Eywallah Saat</h2>
-                <img src="logo.png" alt="Eywallah Saat Logo" class="logo">
-                <div class="divider"></div>
-                <div class="clock">
-                    <h1 id="current-time" aria-live="polite"></h1>
-                    <p id="date" aria-live="polite"></p>
+    <template id="clock-template">
+        <div class="content-center">
+            <h2 class="app-title">Eywallah Saat</h2>
+            <img src="assets/logo.png" alt="Eywallah Saat Logo" class="logo">
+            <div class="divider"></div>
+            <div class="clock">
+                <h1 class="current-time"></h1>
+                <p class="date"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="timer-template">
+        <div class="content-center">
+            <div class="timer">
+                <div class="input-group">
+                    <input type="number" class="timer-minutes" placeholder="Dakika" min="0">
+                    <input type="number" class="timer-seconds" placeholder="Saniye" min="0" max="59">
+                </div>
+                <div class="timer-display">00:00</div>
+                <div class="controls">
+                    <button class="toggle">Başlat</button>
+                    <button class="reset">Sıfırla</button>
                 </div>
             </div>
         </div>
-    </section>
+    </template>
 
-    <section id="timer-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn" title="Tam Ekran">⛶</button>
-            <div class="content-center">
-                <div class="timer">
-                    <div class="input-group">
-                        <input type="number" id="timer-minutes" placeholder="Dakika" min="0" aria-label="Dakika">
-                        <input type="number" id="timer-seconds" placeholder="Saniye" min="0" max="59" aria-label="Saniye">
-                    </div>
-                    <div id="timer-display" aria-live="polite">00:00</div>
-                    <div class="controls">
-                        <button id="timer-toggle">Başlat</button>
-                        <button id="timer-reset">Sıfırla</button>
-                    </div>
+    <template id="alarm-template">
+        <div class="content-center">
+            <div class="alarm">
+                <input type="time" class="alarm-time">
+                <div class="alarm-display"></div>
+                <div class="controls">
+                    <button class="toggle">Başlat</button>
+                    <button class="reset">Sıfırla</button>
                 </div>
             </div>
         </div>
-    </section>
+    </template>
 
-    <section id="alarm-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn" title="Tam Ekran">⛶</button>
-            <div class="content-center">
-                <div class="alarm">
-                    <input type="time" id="alarm-time" aria-label="Alarm Zamanı">
-                    <div id="alarm-display" aria-live="polite"></div>
-                    <div class="controls">
-                        <button id="alarm-toggle">Başlat</button>
-                        <button id="alarm-reset">Sıfırla</button>
-                    </div>
+    <template id="stopwatch-template">
+        <div class="content-center">
+            <div class="stopwatch">
+                <div class="stopwatch-display">00:00:00.000</div>
+                <div class="controls">
+                    <button class="toggle">Başlat</button>
+                    <button class="reset">Sıfırla</button>
                 </div>
             </div>
         </div>
-    </section>
+    </template>
 
-    <section id="stopwatch-section" class="section">
-        <div class="container">
-            <button class="fullscreen-btn" title="Tam Ekran">⛶</button>
-            <div class="content-center">
-                <div class="stopwatch">
-                    <div id="stopwatch-display" aria-live="polite">00:00:00.000</div>
-                    <div class="controls">
-                        <button id="stopwatch-toggle">Başlat</button>
-                        <button id="stopwatch-reset">Sıfırla</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <nav class="bottom-nav">
-        <button data-section="clock-section" class="active" aria-current="page">Saat</button>
-        <button data-section="timer-section">Zamanlayıcı</button>
-        <button data-section="alarm-section">Alarm</button>
-        <button data-section="stopwatch-section">Kronometre</button>
-    </nav>
-
-    <audio id="alert-sound" src="alert.mp3" preload="auto"></audio>
-    <script src="app.js"></script>
+    <audio id="alert-sound" src="assets/alert.mp3" preload="auto"></audio>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
